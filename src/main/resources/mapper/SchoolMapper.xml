@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.youzhi.mapper.SchoolMapper">
+    <resultMap id="School" type="org.example.youzhi.pojo.School">
+        <id property="schoolId" column="school_id"></id>
+        <result property="schoolVariety" column="school_variety"></result>
+        <result property="schoolName" column="school_name"></result>
+        <result property="scoreSocial" column="score_social"></result>
+        <result property="scoreNatural" column="score_natural"></result>
+    </resultMap>
+    <select id="querySchoolBySchoolVariety" resultMap="School">
+        select * from school where school_variety = #{schoolVariety}
+    </select>
+
+
+</mapper>

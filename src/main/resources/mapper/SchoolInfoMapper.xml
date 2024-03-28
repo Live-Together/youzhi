@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.youzhi.mapper.SchoolInfoMapper">
+    <resultMap id="SchoolInfo" type="org.example.youzhi.pojo.SchoolInfo">
+        <result property="schoolId" column="school_id"></result>
+        <result property="schoolName" column="school_name"></result>
+        <result property="majorId" column="major_id"></result>
+        <result property="majorVariety" column="major_variety"></result>
+        <result property="schoolVariety" column="school_variety"></result>
+        <result property="majorName" column="major_name"></result>
+        <result property="scoreLine" column="score_line"></result>
+    </resultMap>
+
+<select id="querySchoolInfo" resultMap="SchoolInfo">
+    select * from schoolinfo
+    <where>
+        <if test="schoolInfo.schoolName != null and schoolInfo.schoolName != ''">and school_name like concat('%', #{schoolInfo.schoolName}, '%')</if>
+        <if test="schoolInfo.majorName != null and schoolInfo.majorName != ''">and major_name like concat('%', #{schoolInfo.majorName}, '%')</if>
+        <if test="schoolInfo.year != null and schoolInfo.year != ''">and year = #{schoolInfo.year}</if>
+        <if test="schoolInfo.majorVariety != null and schoolInfo.majorVariety != 0">and major_variety = #{schoolInfo.majorVariety}</if>
+        <if test="schoolInfo.schoolVariety != null and schoolInfo.schoolVariety != 0">and school_variety = #{schoolInfo.schoolVariety}</if>
+    </where>
+    limit #{pageIndex}, 10
+
+</select>
+
+    <select id="querySchoolInfoCount" resultType="Integer">
+        select count(*) from schoolinfo
+        <where>
+            <if test="schoolName != null and schoolName != ''">and school_name like concat('%', #{schoolName}, '%')</if>
+            <if test="majorName != null and majorName != ''">and major_name like concat('%', #{majorName}, '%')</if>
+            <if test="year != null and year != ''">and year = #{year}</if>
+            <if test="majorVariety != null and majorVariety != 0">and major_variety = #{majorVariety}</if>
+            <if test="schoolVariety != null and schoolVariety != 0">and school_variety = #{schoolVariety}</if>
+        </where>
+
+    </select>
+    <select id="querySchoolInfoByScore" resultMap="SchoolInfo">
+        select * from schoolinfo
+        where score_line between #{scoreMin} and #{scoreMax} and year = '2022'
+
+    </select>
+
+</mapper>
