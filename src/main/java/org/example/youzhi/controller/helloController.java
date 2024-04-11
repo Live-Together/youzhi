@@ -12,9 +12,4 @@ public class helloController {
     public String hello(){
         return "hello world";
     }
-
-    @PostMapping("/file")
-    public void fileUpload(MultipartFile files) {
-        System.out.println(files);
-    }
 }
