@@ -177,8 +177,7 @@ class YouzhiApplicationTests {
 
     @Test
     void contextLoads() {
-        Random rand = new Random();
-        System.out.println(rand.nextInt()%10);
+        System.out.println(new Date(System.currentTimeMillis() + 60*1000));
     }
 
 }
