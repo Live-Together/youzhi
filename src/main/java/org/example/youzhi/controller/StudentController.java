@@ -15,7 +15,9 @@ public class StudentController {
 
     @PostMapping("/login")
     public R login(@RequestBody Student student){
+        System.out.println(student);
         Student stu = studentService.queryStudentById(student.getStudentId());
+        System.out.println(stu);
         if(stu != null && stu.getPassword().equals(student.getPassword())){
             return R.success();
         }else {
