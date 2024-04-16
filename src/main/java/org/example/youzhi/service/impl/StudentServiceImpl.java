@@ -22,4 +22,15 @@ public class StudentServiceImpl implements StudentService {
     public Integer updateStudent(Student student) {
         return studentMapper.updateStudent(student);
     }
+
+    @Override
+    public Integer updatePwd(Student student) {
+        Student stu = queryStudentById(student.getStudentId());
+        if (stu.getPassword().equals(student.getPassword())) {
+            student.setPassword(student.getNewPassword());
+            return studentMapper.updateStudent(student);
+        } else {
+            return 0;
+        }
+    }
 }

@@ -15,9 +15,7 @@ public class StudentController {
 
     @PostMapping("/login")
     public R login(@RequestBody Student student){
-        System.out.println(student);
         Student stu = studentService.queryStudentById(student.getStudentId());
-        System.out.println(stu);
         if(stu != null && stu.getPassword().equals(student.getPassword())){
             return R.success();
         }else {
@@ -31,8 +29,17 @@ public class StudentController {
         return R.success("个人信息", studentService.queryStudentById(Integer.parseInt(Id)));
     }
 
-    @PostMapping("/{Id}/update")
-    public R updateStudent(@RequestBody Student student){
+    @PostMapping("/updatePwd")
+    public R updatePwd(@RequestBody Student student){
+        if(studentService.updatePwd(student) == 1){
+            return R.success();
+        } else {
+            return R.error();
+        }
+    }
+
+    @PostMapping("/updateInfo")
+    public R updateInfo(@RequestBody Student student) {
         if(studentService.updateStudent(student) == 1){
             return R.success();
         } else {

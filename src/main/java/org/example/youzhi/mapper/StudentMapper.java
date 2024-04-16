@@ -14,6 +14,26 @@ public interface StudentMapper {
     Student queryStudentById(Integer id);
 
     @ResultMap("Student")
-    @Update("update student set student_name = #{studentName} ,subject = #{subject} ,score = #{score} ,username = #{username} where student_id = #{studentId}")
+    @Update("<script>" +
+            "UPDATE student " +
+            "<set>" +
+            "<if test='studentName != null and studentName != \"\"'>" +
+            " , student_name = #{studentName} " +
+            "</if>" +
+            "<if test='subject != null and subject != \"\"'>" +
+            " , subject = #{subject} " +
+            "</if>" +
+            "<if test='score != null and score != \"\"'>" +
+            " , score = #{score} " +
+            "</if>" +
+            "<if test='username != null and username != \"\"'>" +
+            " , username = #{username} " +
+            "</if>" +
+            "<if test='password != null and password != \"\"'>" +
+            " , password = #{password} " +
+            "</if>" +
+            "</set>" +
+            " WHERE student_id = #{studentId} " +
+            "</script>")
     Integer updateStudent(Student student);
 }

@@ -18,4 +18,6 @@ public class Student {
   private String score;
   private Integer subject;
 
+  private String newPassword;
+
 }

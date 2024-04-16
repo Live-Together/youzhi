@@ -1,8 +1,9 @@
 package org.example.youzhi.utils;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import org.example.youzhi.pojo.Admin;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.example.youzhi.pojo.Student;
 
 import java.util.Date;
@@ -27,5 +28,18 @@ public class TokenUtil {
             throw new RuntimeException(e);
         }
         return token;
+    }
+
+    public static boolean verity(String token) {
+        try {
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).build();
+            DecodedJWT jwt = verifier.verify(token);
+            System.out.println("认证通过：");
+            System.out.println("过期时间：   " + jwt.getExpiresAt());
+            System.out.println("用户ID：   " + jwt.getClaim("username"));
+            return true;
+        } catch (Exception e){
+            return false;
+        }
     }
 }
