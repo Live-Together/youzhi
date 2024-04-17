@@ -3,10 +3,12 @@ package org.example.youzhi.controller;
 import org.example.youzhi.pojo.SchoolSubmit;
 import org.example.youzhi.service.SchoolSubmitService;
 import org.example.youzhi.utils.R;
+import org.example.youzhi.utils.TokenUtil;
 import org.example.youzhi.vo.SchoolSubmitCount;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -22,9 +24,11 @@ public class SchoolSubmitController {
 //        return R.success("count", schoolSubmitService.getCount(schoolId, majorId));
 //    }
 
-    @GetMapping("/{id}/getSchoolSubmitById")
-    public R getSchoolSubmitById(@PathVariable String id){
-        return R.success("schoolSubmit", schoolSubmitService.querySchoolSubmitById(Integer.valueOf(id)));
+    @GetMapping("/getSchoolSubmitById")
+    public R getSchoolSubmitById(HttpServletRequest request){
+        String token = request.getHeader("token");
+        Integer id = (Integer) TokenUtil.getTokenData(token).get("studentId");
+        return R.success("schoolSubmit", schoolSubmitService.querySchoolSubmitById(id));
     }
 
     @GetMapping("/getMajorNameBySchoolName")
@@ -36,9 +40,11 @@ public class SchoolSubmitController {
         return R.success("majorNames", majorNames);
     }
 
-    @PostMapping("/{id}/schoolSubmit")
-    public R schoolSubmit(@PathVariable String id, @RequestBody SchoolSubmit schoolSubmit){
-        schoolSubmit.setStudentId(Integer.valueOf(id));
+    @PostMapping("/schoolSubmit")
+    public R schoolSubmit(HttpServletRequest request, @RequestBody SchoolSubmit schoolSubmit){
+        String token = request.getHeader("token");
+        Integer id = (Integer) TokenUtil.getTokenData(token).get("studentId");
+        schoolSubmit.setStudentId(id);
         List<SchoolSubmitCount> schoolSubmitCounts = schoolSubmitService.submitSchool(schoolSubmit);
         if(schoolSubmitCounts == null || schoolSubmitCounts.isEmpty()){
             return R.error();

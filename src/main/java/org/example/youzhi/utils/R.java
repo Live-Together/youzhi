@@ -32,7 +32,9 @@ public class R extends HashMap<String, Object> {
     public static R success(){
         return new R(200, null, null);
     }
-
+    public static R success(Object obj){
+        return new R(200, null, obj);
+    }
     public static R error(){
         return new R(500, null, null);
     }

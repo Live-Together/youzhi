@@ -3,9 +3,13 @@ package org.example.youzhi.controller;
 import org.example.youzhi.pojo.Student;
 import org.example.youzhi.service.StudentService;
 import org.example.youzhi.utils.R;
+import org.example.youzhi.utils.TokenUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class StudentController {
@@ -17,16 +21,21 @@ public class StudentController {
     public R login(@RequestBody Student student){
         Student stu = studentService.queryStudentById(student.getStudentId());
         if(stu != null && stu.getPassword().equals(student.getPassword())){
-            return R.success();
+            String token = TokenUtil.sign(student);
+            Map<String, Object>map = new HashMap<>();
+            map.put("token", token);
+            return R.success(map);
         }else {
             return R.error();
         }
     }
 
-    @GetMapping("/{Id}")
-    public R getStudentById(@PathVariable String Id){
-        if(Id == null || "null".equals(Id))return R.error();
-        return R.success("个人信息", studentService.queryStudentById(Integer.parseInt(Id)));
+    @GetMapping("/getStudentInfo")
+    public R getStudentInfo(HttpServletRequest request){
+        String token = request.getHeader("token");
+        Integer id = (Integer) TokenUtil.getTokenData(token).get("studentId");
+        if(id == null)return R.error();
+        return R.success("个人信息", studentService.queryStudentById(id));
     }
 
     @PostMapping("/updatePwd")
