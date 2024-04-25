@@ -10,10 +10,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TokenUtil {
-    private static final long EXPIRE_TIME = 1000*60*60;
-    private static final String TOKEN_SECRET = "test";
+import static org.example.youzhi.constant.TokenConstant.EXPIRE_TIME;
+import static org.example.youzhi.constant.TokenConstant.TOKEN_SALT;
 
+public class TokenUtil {
     /**
      * 签名生成
      */
@@ -25,7 +25,7 @@ public class TokenUtil {
                    .withIssuer("auth0")  //发行人
                    .withClaim("studentId", user.getStudentId())
                    .withExpiresAt(expiresAt)  //过期时间
-                   .sign(Algorithm.HMAC256(TOKEN_SECRET));
+                   .sign(Algorithm.HMAC256(TOKEN_SALT));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -34,7 +34,7 @@ public class TokenUtil {
 
     public static boolean verity(String token) {
         try {
-            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).build();
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SALT)).build();
             verifier.verify(token);
             return true;
         } catch (Exception e){
@@ -44,7 +44,7 @@ public class TokenUtil {
 
     public static Map<String, Object> getTokenData(String token) {
         try {
-            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).build();
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SALT)).build();
             DecodedJWT jwt = verifier.verify(token);
             HashMap<String, Object> map = new HashMap<>();
             map.put("studentId",jwt.getClaim("studentId").asInt());

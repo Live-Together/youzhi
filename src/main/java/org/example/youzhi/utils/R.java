@@ -41,4 +41,16 @@ public class R extends HashMap<String, Object> {
     public static R error(String msg, Object data){
         return new R(500, msg, data);
     }
+
+    public static R toAjax(Boolean bool) {
+        if(bool) {
+            return success();
+        } else {
+            return error();
+        }
+    }
+
+    public static R error(String msg) {
+        return new R(500, msg, null);
+    }
 }
